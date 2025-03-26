@@ -14,20 +14,28 @@ document.getElementById('surveyForm').addEventListener('submit', function(event)
         }
     });
 
-    // Обработка "Другое" для всех вопросов
+    // Обработка "Другое" для каналов продаж, улучшений и новых идей
     const otherFields = [
         { checkbox: 'sales_channels', input: 'sales_channels_other' },
-        { checkbox: 'tools', input: 'tools_other' },
-        { checkbox: 'risks', input: 'risks_other' }
+        { checkbox: 'improve_channels', input: 'improve_channels_other' },
+        { checkbox: 'new_ideas', input: 'new_ideas_other' }
     ];
 
     otherFields.forEach(field => {
         const otherInput = document.querySelector(`input[name="${field.input}"]`);
-        if (otherInput && otherInput.value && data[field.checkbox] && data[field.checkbox].includes('Другое')) {
-            data[field.checkbox] = data[field.checkbox].filter(v => v !== 'Другое');
+        if (otherInput && otherInput.value && data[field.checkbox] && data[field.checkbox].includes(field.checkbox === 'new_ideas' ? 'Ваши идеи' : 'Другое')) {
+            data[field.checkbox] = data[field.checkbox].filter(v => v !== (field.checkbox === 'new_ideas' ? 'Ваши идеи' : 'Другое'));
             data[field.checkbox].push(otherInput.value);
         }
     });
+
+    // Собираем приоритеты задач
+    const prioritiesList = document.querySelector('.sortable');
+    data['priorities'] = Array.from(prioritiesList.children).map(li => li.getAttribute('data-value'));
+
+    // Собираем приоритеты улучшений
+    const improvementsList = document.querySelector('.sortable-improvements');
+    data['improvement_priorities'] = Array.from(improvementsList.children).map(li => li.getAttribute('data-value'));
 
     console.log(data);
     localStorage.setItem('surveyData', JSON.stringify(data));
@@ -51,24 +59,15 @@ document.getElementById('surveyForm').addEventListener('submit', function(event)
     this.reset();
 });
 
-// Функция для обновления опций во втором вопросе
+// Функция для обновления опций во втором вопросе и третьем вопросе
 function updateSecondQuestionOptions() {
-    // Получаем все выбранные каналы продаж
     const selectedChannels = Array.from(document.querySelectorAll('input[name="sales_channels[]"]:checked'))
         .map(checkbox => checkbox.value);
 
-    // Скрываем все подопции во втором вопросе
     document.querySelectorAll('.sub-options').forEach(option => {
         option.style.display = 'none';
     });
 
-    // Скрываем текстовое поле для "Другое" во втором вопросе
-    const otherImprovementInput = document.getElementById('improve_other_input');
-    if (otherImprovementInput) {
-        otherImprovementInput.style.display = 'none';
-    }
-
-    // Показываем подопции для каждого выбранного канала
     selectedChannels.forEach(channel => {
         switch(channel) {
             case 'Реклама':
@@ -80,60 +79,131 @@ function updateSecondQuestionOptions() {
             case 'Рассылки':
                 document.querySelector('.sub-options.emails').style.display = 'block';
                 break;
-            case 'Другое':
-                // Показываем текстовое поле для "Другое" во втором вопросе
-                if (otherImprovementInput) {
-                    otherImprovementInput.style.display = 'block';
-                }
-                break;
         }
     });
 
-    // Всегда показываем опцию "Другое"
-    document.querySelector('input[name="improve_channels[]"][value="Другое"]')
-        .closest('.checkbox-container').style.display = 'flex';
+    // "Другое" всегда видимо, независимо от выбора в первом вопросе
+    const otherCheckboxContainer = document.querySelector('input[name="improve_channels[]"][value="Другое"]').closest('.checkbox-container');
+    otherCheckboxContainer.style.display = 'flex';
+
+    // Обновляем список приоритетов улучшений
+    updateImprovementPriorities();
 }
 
-// Добавляем слушатели событий для всех чекбоксов первого вопроса
+// Функция для обновления списка приоритетов улучшений
+function updateImprovementPriorities() {
+    const improvementsList = document.querySelector('.sortable-improvements');
+    improvementsList.innerHTML = ''; // Очищаем список
+
+    const selectedImprovements = [
+        ...Array.from(document.querySelectorAll('input[name="advertising_improvements[]"]:checked')).map(cb => cb.value),
+        ...Array.from(document.querySelectorAll('input[name="calls_improvements[]"]:checked')).map(cb => cb.value),
+        ...Array.from(document.querySelectorAll('input[name="emails_improvements[]"]:checked')).map(cb => cb.value),
+        ...Array.from(document.querySelectorAll('input[name="improve_channels[]"]:checked')).map(cb => cb.value === 'Другое' ? document.querySelector('#improve_other_input').value || 'Другое' : cb.value)
+    ];
+
+    selectedImprovements.forEach(improvement => {
+        const li = document.createElement('li');
+        li.setAttribute('data-value', improvement);
+        li.innerHTML = `${improvement} <span class="drag-handle">↕</span>`;
+        li.setAttribute('draggable', 'true');
+        improvementsList.appendChild(li);
+    });
+
+    // Добавляем drag-and-drop для нового списка
+    let draggedItem = null;
+    improvementsList.addEventListener('dragstart', (e) => {
+        draggedItem = e.target.closest('li');
+        draggedItem.classList.add('dragging');
+    });
+
+    improvementsList.addEventListener('dragend', () => {
+        draggedItem.classList.remove('dragging');
+        draggedItem = null;
+    });
+
+    improvementsList.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+
+    improvementsList.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const targetItem = e.target.closest('li');
+        if (targetItem && draggedItem !== targetItem) {
+            const allItems = Array.from(improvementsList.children);
+            const draggedIndex = allItems.indexOf(draggedItem);
+            const targetIndex = allItems.indexOf(targetItem);
+
+            if (draggedIndex < targetIndex) {
+                targetItem.after(draggedItem);
+            } else {
+                targetItem.before(draggedItem);
+            }
+        }
+    });
+}
+
+// Добавляем слушатели событий для всех чекбоксов первого и второго вопросов
 document.querySelectorAll('input[name="sales_channels[]"]').forEach(checkbox => {
     checkbox.addEventListener('change', updateSecondQuestionOptions);
 });
 
-// Инициализируем состояние при загрузке страницы
-document.addEventListener('DOMContentLoaded', updateSecondQuestionOptions);
+document.querySelectorAll('input[name="advertising_improvements[]"], input[name="calls_improvements[]"], input[name="emails_improvements[]"], input[name="improve_channels[]"]').forEach(checkbox => {
+    checkbox.addEventListener('change', updateImprovementPriorities);
+});
 
+document.querySelector('#improve_other_input').addEventListener('input', updateImprovementPriorities);
+
+// Drag-and-drop для сортировки приоритетов задач
 document.addEventListener('DOMContentLoaded', function() {
-    // Обработка поля "Другое" для инструментов
-    const toolsOtherCheckbox = document.getElementById('tools_other');
-    const toolsOtherInput = document.getElementById('tools_other_input');
-    if (toolsOtherCheckbox && toolsOtherInput) {
-        toolsOtherCheckbox.addEventListener('change', function() {
-            toolsOtherInput.style.display = this.checked ? 'block' : 'none';
-        });
-    }
+    const sortableList = document.querySelector('.sortable');
+    let draggedItem = null;
 
-    // Обработка поля "Другое" для рисков
-    const risksOtherCheckbox = document.getElementById('risk_other');
-    const risksOtherInput = document.getElementById('risk_other_input');
-    if (risksOtherCheckbox && risksOtherInput) {
-        risksOtherCheckbox.addEventListener('change', function() {
-            risksOtherInput.style.display = this.checked ? 'block' : 'none';
-        });
-    }
+    sortableList.addEventListener('dragstart', (e) => {
+        draggedItem = e.target.closest('li');
+        draggedItem.classList.add('dragging');
+    });
 
-    // Инициализация состояния полей "Другое"
-    if (toolsOtherInput) toolsOtherInput.style.display = 'none';
-    if (risksOtherInput) risksOtherInput.style.display = 'none';
+    sortableList.addEventListener('dragend', () => {
+        draggedItem.classList.remove('dragging');
+        draggedItem = null;
+    });
+
+    sortableList.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+
+    sortableList.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const targetItem = e.target.closest('li');
+        if (targetItem && draggedItem !== targetItem) {
+            const allItems = Array.from(sortableList.children);
+            const draggedIndex = allItems.indexOf(draggedItem);
+            const targetIndex = allItems.indexOf(targetItem);
+
+            if (draggedIndex < targetIndex) {
+                targetItem.after(draggedItem);
+            } else {
+                targetItem.before(draggedItem);
+            }
+        }
+    });
+
+    // Делаем все элементы перетаскиваемыми
+    Array.from(sortableList.children).forEach(item => {
+        item.setAttribute('draggable', 'true');
+    });
+
+    // Инициализируем состояние
+    updateSecondQuestionOptions();
 });
 
 // Функция для генерации Excel файла
 function generateExcel() {
     const companyData = JSON.parse(localStorage.getItem('surveyData') || '{}');
     
-    // Создаем рабочую книгу
     const wb = XLSX.utils.book_new();
     
-    // Подготавливаем данные для таблицы
     const data = [
         ['Форма предварительного опроса для Контур.Компас'],
         [''],
@@ -147,28 +217,15 @@ function generateExcel() {
         ['Улучшения для рекламы:', Array.isArray(companyData.advertising_improvements) ? companyData.advertising_improvements.join(', ') : companyData.advertising_improvements || 'Не указано'],
         ['Улучшения для звонков:', Array.isArray(companyData.calls_improvements) ? companyData.calls_improvements.join(', ') : companyData.calls_improvements || 'Не указано'],
         ['Улучшения для рассылок:', Array.isArray(companyData.emails_improvements) ? companyData.emails_improvements.join(', ') : companyData.emails_improvements || 'Не указано'],
-        ['Приоритетные задачи:', Array.isArray(companyData.priorities) ? companyData.priorities.join(', ') : companyData.priorities || 'Не указано'],
-        ['Используемые инструменты:', Array.isArray(companyData.tools) ? companyData.tools.join(', ') : companyData.tools || 'Не указано'],
-        ['Критерии выбора инструмента:', Array.isArray(companyData.criteria) ? companyData.criteria.join(', ') : companyData.criteria || 'Не указано'],
-        ['Объем данных:', companyData.data_volume || 'Не указано'],
-        ['Параметры анализа:', Array.isArray(companyData.analysis_params) ? companyData.analysis_params.join(', ') : companyData.analysis_params || 'Не указано'],
-        ['Частота обновления данных:', companyData.update_frequency || 'Не указано'],
-        ['Учитываемые риски:', Array.isArray(companyData.risks) ? companyData.risks.join(', ') : companyData.risks || 'Не указано'],
-        ['Метрики успеха:', Array.isArray(companyData.success_metrics) ? companyData.success_metrics.join(', ') : companyData.success_metrics || 'Не указано'],
-        ['Основные пользователи:', Array.isArray(companyData.users) ? companyData.users.join(', ') : companyData.users || 'Не указано'],
-        ['Ожидаемая поддержка:', Array.isArray(companyData.support) ? companyData.support.join(', ') : companyData.support || 'Не указано']
+        ['Другие улучшения:', Array.isArray(companyData.improve_channels) ? companyData.improve_channels.join(', ') : companyData.improve_channels || 'Не указано'],
+        ['Приоритетность улучшений:', Array.isArray(companyData.improvement_priorities) ? companyData.improvement_priorities.join(', ') : companyData.improvement_priorities || 'Не указано'],
+        ['Приоритетные задачи (в порядке убывания):', Array.isArray(companyData.priorities) ? companyData.priorities.join(', ') : companyData.priorities || 'Не указано'],
+        ['Новые идеи для бизнеса:', Array.isArray(companyData.new_ideas) ? companyData.new_ideas.join(', ') : companyData.new_ideas || 'Не указано']
     ];
     
-    // Создаем лист с данными
     const ws = XLSX.utils.aoa_to_sheet(data);
-    
-    // Устанавливаем ширину колонок
     ws['!cols'] = [{ wch: 40 }, { wch: 100 }];
-    
-    // Добавляем лист в книгу
     XLSX.utils.book_append_sheet(wb, ws, 'Опрос');
-    
-    // Сохраняем файл
     XLSX.writeFile(wb, 'Опрос_Контур.Компас.xlsx');
 }
 
