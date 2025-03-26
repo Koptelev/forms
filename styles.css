@@ -46,7 +46,6 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Удаляем дублирующиеся стили */
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -152,7 +151,6 @@ form label {
     font-size: 1.1em;
 }
 
-#company-info label[for="inn_kpp"],
 #company-info label[for="company_name"] {
     display: block;
     text-align: center;
@@ -161,7 +159,6 @@ form label {
     margin: 10px 0 5px;
 }
 
-#company-info input#inn_kpp,
 #company-info input#company_name {
     display: block;
     margin: 0 auto;
@@ -252,12 +249,6 @@ form input[type="checkbox"]:checked + label + .other-input {
     transition: all 0.3s ease;
 }
 
-form input#improve_advertising:checked ~ .sub-options.advertising,
-form input#improve_calls:checked ~ .sub-options.calls,
-form input#improve_emails:checked ~ .sub-options.emails {
-    display: block;
-}
-
 button {
     background-color: #ff5555;
     color: #ffffff;
@@ -316,7 +307,6 @@ footer {
     header .logo {
         width: 90px;
     }
-    #company-info input#inn_kpp,
     #company-info input#company_name {
         width: 80%;
     }
@@ -377,34 +367,46 @@ footer {
     }
 }
 
-/* Стили для логотипа */
-.logo-container {
+/* Стили для перетаскиваемых списков */
+.sortable, .sortable-improvements {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.sortable li, .sortable-improvements li {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 15px;
-    padding: 15px;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: var(--input-bg);
+    border: 2px solid var(--input-border);
     border-radius: 8px;
-    background-color: var(--bg-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-}
-
-.logo-container:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.logo-container img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-}
-
-.logo-container h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
+    cursor: move;
     color: var(--text-color);
-    transition: color 0.3s ease;
+    transition: background-color 0.3s ease;
+}
+
+.sortable li:hover, .sortable-improvements li:hover {
+    background-color: #f0f0f0;
+}
+
+[data-theme="dark"] .sortable li:hover, [data-theme="dark"] .sortable-improvements li:hover {
+    background-color: #333;
+}
+
+.sortable li.dragging, .sortable-improvements li.dragging {
+    opacity: 0.5;
+    background-color: #ddd;
+}
+
+[data-theme="dark"] .sortable li.dragging, [data-theme="dark"] .sortable-improvements li.dragging {
+    background-color: #444;
+}
+
+.drag-handle {
+    font-size: 1.2em;
+    color: #ff5555;
+    cursor: grab;
 }
