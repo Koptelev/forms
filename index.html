@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Форма предварительного опроса для Контур.Компас</title>
+    <title>Бизнес-анализ в 5 шагов с Контур.Компасом</title>
     <link rel="icon" href="https://kontur.ru/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <img src="compass-128.png" alt="Контур.Компас" class="logo">
-        <h1>Форма предварительного опроса для Контур.Компас</h1>
+        <h1>Бизнес-анализ в 5 шагов с Контур.Компасом</h1>
         <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
             <span class="theme-icon">🌙</span>
         </button>
@@ -25,7 +25,8 @@
         </section>
         <section id="about">
             <h2>Что такое Контур.Компас?</h2>
-            <p class="black-text">Контур.Компас — это сервис для точного поиска и анализа организаций: клиентов, поставщиков, партнеров, спонсоров. Компас помогает отделам продаж.</p>
+            <p class="black-text">Контур.Компас — это сервис для точного поиска и анализа организаций: клиентов, поставщиков, партнеров, спонсоров. Компас помогает отделам продаж эффективнее работать с существующими клиентами и находить новых благодаря детальной информации об организациях и прорабатывать новые маркетинговые стратегии и гипотезы для привлечения входящего трафика.</p>
+            <p class="black-text">Процесс состоит из 5 простых шагов. Ваша честность и точность при заполнении формы позволит провести наиболее эффективную встречу!</p>
         </section>
         <section id="form">
             <h2>Заполните форму для предварительной презентации</h2>
@@ -117,195 +118,44 @@
                     </div>
                 </section>
                 <section>
-                    <h3>Какие задачи вашей компании являются приоритетными в ближайшие 6–12 месяцев?</h3>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="priority_sales" name="priorities[]" value="Увеличение объема продаж">
-                        <label for="priority_sales">Увеличение объема продаж</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="priority_optimization" name="priorities[]" value="Оптимизация бизнес-процессов">
-                        <label for="priority_optimization">Оптимизация бизнес-процессов</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="priority_clients" name="priorities[]" value="Расширение клиентской базы">
-                        <label for="priority_clients">Расширение клиентской базы</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="priority_tech" name="priorities[]" value="Внедрение новых технологий">
-                        <label for="priority_tech">Внедрение новых технологий</label>
-                    </div>
+                    <h3>Расставьте ответы по приоритетности</h3>
+                    <ul class="sortable-improvements" name="improvement_priorities[]"></ul>
                 </section>
                 <section>
-                    <h3>Какие инструменты или системы вы уже используете для поиска клиентов?</h3>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="tools_crm" name="tools[]" value="CRM-системы">
-                        <label for="tools_crm">CRM-системы (например, Битрикс24, amoCRM)</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="tools_search" name="tools[]" value="Поисковые системы и социальные сети">
-                        <label for="tools_search">Поисковые системы и социальные сети</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="tools_special" name="tools[]" value="Специализированные сервисы">
-                        <label for="tools_special">Специализированные сервисы (например, Контур.Компас)</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="tools_other" name="tools[]" value="Другое">
-                        <label for="tools_other">Другое</label>
-                        <input type="text" class="other-input" id="tools_other_input" name="tools_other" placeholder="Укажите свой вариант">
-                    </div>
+                    <h3>Расставьте в приоритете задачи вашей компании, которые являются важными для вас в ближайшие 6–12 месяцев</h3>
+                    <ul class="sortable" name="priorities[]">
+                        <li data-value="Увеличение объема продаж">Увеличение объема продаж <span class="drag-handle">↕</span></li>
+                        <li data-value="Оптимизация бизнес-процессов">Оптимизация бизнес-процессов <span class="drag-handle">↕</span></li>
+                        <li data-value="Расширение клиентской базы">Расширение клиентской базы <span class="drag-handle">↕</span></li>
+                        <li data-value="Внедрение новых технологий">Внедрение новых технологий <span class="drag-handle">↕</span></li>
+                    </ul>
                 </section>
                 <section>
-                    <h3>Какие критерии для вас наиболее важны при выборе нового инструмента?</h3>
+                    <h3>Какие новые идеи вы хотите внедрить в ваш бизнес?</h3>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="criteria_simplicity" name="criteria[]" value="Простота использования">
-                        <label for="criteria_simplicity">Простота использования</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="criteria_functionality" name="criteria[]" value="Функциональность и возможности анализа">
-                        <label for="criteria_functionality">Функциональность и возможности анализа</label>
+                        <input type="checkbox" id="idea_advertising" name="new_ideas[]" value="Реклама">
+                        <label for="idea_advertising">Реклама</label>
                     </div>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="criteria_cost" name="criteria[]" value="Стоимость решения">
-                        <label for="criteria_cost">Стоимость решения</label>
+                        <input type="checkbox" id="idea_calls" name="new_ideas[]" value="Звонки">
+                        <label for="idea_calls">Звонки</label>
                     </div>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="criteria_integration" name="criteria[]" value="Интеграция с существующими системами">
-                        <label for="criteria_integration">Интеграция с существующими системами</label>
-                    </div>
-                </section>
-                <section>
-                    <h3>Какой объем данных вам необходимо обрабатывать ежемесячно?</h3>
-                    <div class="radio-container">
-                        <input type="radio" id="volume_100" name="data_volume" value="До 100 компаний">
-                        <label for="volume_100">До 100 компаний</label>
-                    </div>
-                    <div class="radio-container">
-                        <input type="radio" id="volume_500" name="data_volume" value="От 100 до 500 компаний">
-                        <label for="volume_500">От 100 до 500 компаний</label>
-                    </div>
-                    <div class="radio-container">
-                        <input type="radio" id="volume_1000" name="data_volume" value="От 500 до 1000 компаний">
-                        <label for="volume_1000">От 500 до 1000 компаний</label>
-                    </div>
-                    <div class="radio-container">
-                        <input type="radio" id="volume_more" name="data_volume" value="Более 1000 компаний">
-                        <label for="volume_more">Более 1000 компаний</label>
-                    </div>
-                </section>
-                <section>
-                    <h3>Какие параметры анализа для вас наиболее важны?</h3>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="analysis_finance" name="analysis_params[]" value="Финансовая устойчивость компаний">
-                        <label for="analysis_finance">Финансовая устойчивость компаний</label>
+                        <input type="checkbox" id="idea_emails" name="new_ideas[]" value="Рассылки">
+                        <label for="idea_emails">Рассылки</label>
                     </div>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="analysis_geo" name="analysis_params[]" value="Географическое расположение">
-                        <label for="analysis_geo">Географическое расположение</label>
+                        <input type="checkbox" id="idea_call_center" name="new_ideas[]" value="Колл-центр">
+                        <label for="idea_call_center">Колл-центр</label>
                     </div>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="analysis_size" name="analysis_params[]" value="Размер компании">
-                        <label for="analysis_size">Размер компании (выручка, количество сотрудников)</label>
+                        <input type="checkbox" id="idea_robocalls" name="new_ideas[]" value="Роботизированный обзвон">
+                        <label for="idea_robocalls">Роботизированный обзвон</label>
                     </div>
                     <div class="checkbox-container">
-                        <input type="checkbox" id="analysis_industry" name="analysis_params[]" value="Отраслевая специфика">
-                        <label for="analysis_industry">Отраслевая специфика</label>
-                    </div>
-                </section>
-                <section>
-                    <h3>Как часто вашей компании требуется обновление данных о потенциальных клиентах?</h3>
-                    <div class="radio-container">
-                        <input type="radio" id="update_daily" name="update_frequency" value="Ежедневно">
-                        <label for="update_daily">Ежедневно</label>
-                    </div>
-                    <div class="radio-container">
-                        <input type="radio" id="update_weekly" name="update_frequency" value="Еженедельно">
-                        <label for="update_weekly">Еженедельно</label>
-                    </div>
-                    <div class="radio-container">
-                        <input type="radio" id="update_monthly" name="update_frequency" value="Ежемесячно">
-                        <label for="update_monthly">Ежемесячно</label>
-                    </div>
-                    <div class="radio-container">
-                        <input type="radio" id="update_as_needed" name="update_frequency" value="По мере необходимости">
-                        <label for="update_as_needed">По мере необходимости</label>
-                    </div>
-                </section>
-                <section>
-                    <h3>Какие риски вы чаще всего учитываете при работе с новыми клиентами?</h3>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="risk_payment" name="risks[]" value="Неплатежеспособность клиентов">
-                        <label for="risk_payment">Неплатежеспособность клиентов</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="risk_loyalty" name="risks[]" value="Низкая лояльность клиентов">
-                        <label for="risk_loyalty">Низкая лояльность клиентов</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="risk_info" name="risks[]" value="Недостаток информации о клиенте">
-                        <label for="risk_info">Недостаток информации о клиенте</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="risk_other" name="risks[]" value="Другое">
-                        <label for="risk_other">Другое</label>
-                        <input type="text" class="other-input" id="risk_other_input" name="risks_other" placeholder="Укажите свой вариант">
-                    </div>
-                </section>
-                <section>
-                    <h3>Какую метрику успеха вы используете для оценки эффективности инструментов?</h3>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="success_roi" name="success_metrics[]" value="ROI">
-                        <label for="success_roi">ROI (возврат на инвестиции)</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="success_leads" name="success_metrics[]" value="Увеличение числа лидов">
-                        <label for="success_leads">Увеличение числа лидов</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="success_sales" name="success_metrics[]" value="Увеличение объема продаж">
-                        <label for="success_sales">Увеличение объема продаж</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="success_efficiency" name="success_metrics[]" value="Снижение трудозатрат">
-                        <label for="success_efficiency">Снижение трудозатрат</label>
-                    </div>
-                </section>
-                <section>
-                    <h3>Кто будет основным пользователем нового инструмента в вашей компании?</h3>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="user_sales_manager" name="users[]" value="Руководитель отдела продаж">
-                        <label for="user_sales_manager">Руководитель отдела продаж</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="user_sales" name="users[]" value="Менеджеры по продажам">
-                        <label for="user_sales">Менеджеры по продажам</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="user_analysts" name="users[]" value="Аналитики или маркетологи">
-                        <label for="user_analysts">Аналитики или маркетологи</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="user_tech" name="users[]" value="Технические специалисты">
-                        <label for="user_tech">Технические специалисты</label>
-                    </div>
-                </section>
-                <section>
-                    <h3>Какую поддержку вы ожидаете от поставщика сервиса?</h3>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="support_training" name="support[]" value="Обучение сотрудников">
-                        <label for="support_training">Обучение сотрудников</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="support_24_7" name="support[]" value="Техническая поддержка 24/7">
-                        <label for="support_24_7">Техническая поддержка 24/7</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="support_updates" name="support[]" value="Регулярные обновления продукта">
-                        <label for="support_updates">Регулярные обновления продукта</label>
-                    </div>
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="support_consulting" name="support[]" value="Консультации по внедрению">
-                        <label for="support_consulting">Консультации по внедрению</label>
+                        <input type="checkbox" id="idea_other" name="new_ideas[]" value="Ваши идеи">
+                        <label for="idea_other">Ваши идеи</label>
+                        <input type="text" class="other-input" id="idea_other_input" name="new_ideas_other" placeholder="Укажите свои идеи">
                     </div>
                 </section>
                 <button type="submit">Отправить</button>
